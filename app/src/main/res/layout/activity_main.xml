@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.MainActivity">
+
+    <com.example.views.ui.StatsView
+        android:id="@+id/stats"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        app:lineWidth="16dp"
+        app:textSize="40sp"
+        app:color1="#123741"
+        app:color2="#654789"
+        app:color3="#900874"
+        app:color4="#547123"/>
+<!--        app:colors="@array/colors"-->
+
+</FrameLayout>
