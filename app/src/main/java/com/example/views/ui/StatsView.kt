@@ -99,7 +99,7 @@ class StatsView @JvmOverloads constructor(
         canvas.drawPoint(center.x, lineWidth/2, paint)
 
         canvas.drawText(
-            "%.2f%%".format(100),
+            "%.2f%%".format(100.0),
             center.x,
             center.y + textPaint.textSize / 4,
             textPaint,
