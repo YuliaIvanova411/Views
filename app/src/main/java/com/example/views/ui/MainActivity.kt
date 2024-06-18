@@ -9,10 +9,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findViewById<StatsView>(R.id.stats).data = listOf(
-            500.00F,
-            500.00F,
-            500.00F,
-            500.00F,
+            25.00F,
+            25.00F,
+            25.00F,
+            25.00F,
         )
 
     }
