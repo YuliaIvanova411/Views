@@ -14,5 +14,5 @@
         app:lineWidth="20dp"
         app:fontSize="50dp"
         app:colors="@array/colors"
-    />
+        />
 </FrameLayout>

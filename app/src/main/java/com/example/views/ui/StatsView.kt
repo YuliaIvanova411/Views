@@ -1,5 +1,6 @@
 package com.example.views.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -7,6 +8,7 @@ import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.LinearInterpolator
 import androidx.core.content.withStyledAttributes
 import com.example.views.R
 import com.example.views.ui.utils.AndroidUtils
@@ -26,16 +28,21 @@ class StatsView @JvmOverloads constructor(
 ){
     private var radius = 0F
     private var center = PointF(0F, 0F)
-    private var oval = RectF(
-        center.x - radius,
-        center.y - radius,
-        center.x + radius,
-        center.y + radius
-    )
+    private var oval = RectF(0F, 0F, 0F, 0F)
+
+//    private var oval = RectF(
+//        center.x - radius,
+//        center.y - radius,
+//        center.x + radius,
+//        center.y + radius
+//    )
 
     private var fontSize = AndroidUtils.sp(context, 40F).toFloat()
     private var lineWidth = AndroidUtils.dp(context, 5).toFloat()
     private var colors = emptyList<Int>()
+
+    private var progress = 0F
+    private var valueAnimator: ValueAnimator? = null
     init {
         context.withStyledAttributes(attributeSet, R.styleable.StatsView){
             lineWidth = getDimension(R.styleable.StatsView_lineWidth, lineWidth)
@@ -72,7 +79,7 @@ class StatsView @JvmOverloads constructor(
             center.x - radius, center.y - radius,
             center.x + radius, center.y + radius,
         )
-         }
+    }
 
     override fun onDraw(canvas: Canvas) {
         if (data.isEmpty()){
@@ -84,6 +91,8 @@ class StatsView @JvmOverloads constructor(
             )
             return
         }
+
+        val progressAngle = progress * 360F
         var startAngle = -90F
         var firstColor = 0
         for ((index, datum) in data.withIndex()) {
@@ -92,20 +101,39 @@ class StatsView @JvmOverloads constructor(
             if (firstColor == 0) {
                 firstColor = paint.color
             }
-            canvas.drawArc(oval, startAngle, angle, false, paint)
+            canvas.drawArc(oval, startAngle + progressAngle, angle, false, paint)
             startAngle += angle
         }
         paint.color = firstColor
         canvas.drawPoint(center.x, lineWidth/2, paint)
 
         canvas.drawText(
-            "%.2f%%".format(100.0),
+            "%.2f%%".format(100.00),
             center.x,
             center.y + textPaint.textSize / 4,
             textPaint,
         )
         return
     }
+    private fun update() {
+        valueAnimator?.let {
+            it.removeAllListeners()
+            it.cancel()
+        }
+        progress = 0F
+
+        valueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
+            addUpdateListener { anim ->
+                progress = anim.animatedValue as Float
+                invalidate()
+            }
+            duration = 5_000
+            interpolator = LinearInterpolator()
+        }.also {
+            it.start()
+        }
+    }
+
 
     private fun generateRandomColor() = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt())
 }
